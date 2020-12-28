@@ -53,7 +53,7 @@ function init() {
 
 function genLetters() {
     for (let i = 0; i < NUM_LETTERS; ++i) {
-        letters[i] = new Letter(Math.random() * WIDTH, Math.random() * HEIGHT, char = alphabet[Math.floor(Math.random() * alphabet.length)]);
+        letters[i] = new Letter(Math.random() * (WIDTH - 400) + 200, Math.random() * (HEIGHT - 400) + 200, char = alphabet[Math.floor(Math.random() * alphabet.length)]);
         measurement = ctx.measureText(letters[i].char);
         letters[i].setDim(measurement.width, measurement.height);
     }
@@ -97,15 +97,16 @@ function drawTriline() {
 
 function drawLetters() {
     ctx.font = "160px Primary Penmanship";
-    ctx.fillText("B", x, y); 
-    textWidth = ctx.measureText("A").width;
+    for (let i = 0; i < NUM_LETTERS; ++i) {
+        ctx.fillText(letters[i].char, letters[i].x, letters[i].y);
+    }
 }
 
 function myMove(e){
- if (dragok){
-  x = e.pageX - canvas.offsetLeft;
-  y = e.pageY - canvas.offsetTop;
- }
+    if (dragok){
+     x = e.pageX - canvas.offsetLeft;
+     y = e.pageY - canvas.offsetTop;
+    }
 }
 
 function touchMove(e){
@@ -114,17 +115,17 @@ function touchMove(e){
      x = e.targetTouches[0].pageX - canvas.offsetLeft;
      y = e.targetTouches[0].pageY - canvas.offsetTop;
     }
-   }
+}
 
 function myDown(e){
- if (e.pageX > x + canvas.offsetLeft && e.pageX < x + textWidth +
- canvas.offsetLeft && e.pageY < y + canvas.offsetTop &&
- e.pageY > y - 100 + canvas.offsetTop){
-  x = e.pageX - canvas.offsetLeft;
-  y = e.pageY - canvas.offsetTop;
-  dragok = true;
-  canvas.onmousemove = myMove;
- }
+    if (e.pageX > x + canvas.offsetLeft && e.pageX < x + textWidth +
+    canvas.offsetLeft && e.pageY < y + canvas.offsetTop &&
+    e.pageY > y - 100 + canvas.offsetTop){
+     x = e.pageX - canvas.offsetLeft;
+     y = e.pageY - canvas.offsetTop;
+     dragok = true;
+     canvas.onmousemove = myMove;
+    }
 }
 
 function touchDown(touchE){
@@ -140,13 +141,13 @@ function touchDown(touchE){
 }
 
 function myUp(){
- dragok = false;
- canvas.onmousemove = null;
+    dragok = false;
+    canvas.onmousemove = null;
 }
 
 function touchUp(){
     dragok = false;
     canvas.removeEventListener('touchmove', touchMove, false);
-   }
+}
 
 init();
