@@ -1,11 +1,8 @@
 var canvas;
 var body;
 var ctx;
-var x = 75;
-var y = 100;
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
-var dragok = false;
 var LINESPACE = 50;
 var DOT_GAP = 10;
 var textWidth = 50;
@@ -18,6 +15,7 @@ class Letter {
         this.x = x;
         this.y = y;
         this.char = char;
+        this.dragging = false;
     }
     setDim(width, height){
         this.width = width;
@@ -28,8 +26,6 @@ class Letter {
 
 
 function init() {
-    x = 75;
-    y = 100;
 
     canvas = document.getElementById("canvas");
     body = document.getElementsByTagName("BODY")[0];
@@ -41,9 +37,11 @@ function init() {
     ctx.canvas.height = window.innerHeight;
 
     canvas.addEventListener('touchstart', touchDown, false);
-    canvas.addEventListener('touchend', touchUp, false);
-    canvas.onmousedown = myDown;
-    canvas.onmouseup = myUp;
+    canvas.addEventListener('touchend', upHandler, false);
+    canvas.addEventListener('touchmove', touchMove, false);
+    canvas.onmousedown = mouseDown;
+    canvas.onmouseup = upHandler;
+    canvas.onmousemove = myMove;
     window.addEventListener('resize', resizeCanvas, false);
 
     genLetters();
@@ -103,51 +101,51 @@ function drawLetters() {
 }
 
 function myMove(e){
-    if (dragok){
-     x = e.pageX - canvas.offsetLeft;
-     y = e.pageY - canvas.offsetTop;
-    }
+    moveHandler(e);
 }
 
 function touchMove(e){
-    if (dragok){
-     e.preventDefault();
-     x = e.targetTouches[0].pageX - canvas.offsetLeft;
-     y = e.targetTouches[0].pageY - canvas.offsetTop;
+    e.preventDefault();
+    moveHandler(e.targetTouches[0]);
+}
+
+function moveHandler(e) {
+    for (let i = 0; i < NUM_LETTERS; ++i) {
+        if (letters[i].dragging){
+            letters[i].x = e.pageX - canvas.offsetLeft;
+            letters[i].y = e.pageY - canvas.offsetTop;
+        }
     }
 }
 
-function myDown(e){
-    if (e.pageX > x + canvas.offsetLeft && e.pageX < x + textWidth +
-    canvas.offsetLeft && e.pageY < y + canvas.offsetTop &&
-    e.pageY > y - 100 + canvas.offsetTop){
-     x = e.pageX - canvas.offsetLeft;
-     y = e.pageY - canvas.offsetTop;
-     dragok = true;
-     canvas.onmousemove = myMove;
-    }
+function mouseDown(e){
+    downHandler(e);
 }
 
 function touchDown(touchE){
     let e = touchE.targetTouches[0];
-    if (e.pageX < x + textWidth + canvas.offsetLeft && e.pageX > x +
-                    canvas.offsetLeft && e.pageY < y + canvas.offsetTop &&
-                    e.pageY > y - 100 + canvas.offsetTop){
-        x = e.pageX - canvas.offsetLeft;
-        y = e.pageY - canvas.offsetTop;
-        dragok = true;
-        canvas.addEventListener('touchmove', touchMove, false);
+    downHandler(e);
+}
+
+function downHandler(e) {
+    for (let i = 0; i < NUM_LETTERS; ++i) {
+        if (e.pageX < letters[i].x + 100 + canvas.offsetLeft && e.pageX > letters[i].x +
+            canvas.offsetLeft && e.pageY < letters[i].y + canvas.offsetTop &&
+            e.pageY > letters[i].y - 100 + canvas.offsetTop){
+        letters[i].x = e.pageX - canvas.offsetLeft;
+        letters[i].y = e.pageY - canvas.offsetTop;
+        letters[i].dragging = true;
+        break;
+        }
     }
 }
 
-function myUp(){
-    dragok = false;
-    canvas.onmousemove = null;
-}
-
-function touchUp(){
-    dragok = false;
-    canvas.removeEventListener('touchmove', touchMove, false);
+function upHandler(e) {
+    for (let i = 0; i < NUM_LETTERS; ++i) {
+        if (letters[i].dragging) {
+            letters[i].dragging = false;
+        }
+    }
 }
 
 init();
