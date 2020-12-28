@@ -81,7 +81,7 @@ function drawTriline() {
 }
 
 function drawLetters() {
-    ctx.font = "160px Primary Penmanship";
+    ctx.font = "165px Primary Penmanship";
     for (let i = 0; i < NUM_LETTERS; ++i) {
         ctx.fillText(letters[i].char, letters[i].x, letters[i].y);
     }
@@ -103,7 +103,7 @@ function moveHandler(e) {
             letters[i].y = e.pageY - canvas.offsetTop;
             if (Math.abs(letters[i].y - ((HEIGHT / 2) + LINESPACE)) < SNAP_RANGE) {
                 letters[i].dragging = false;
-                letters[i].locked = true;
+                //letters[i].locked = true;
                 letters[i].y = (HEIGHT / 2) + LINESPACE;
                 party.position(letters[i].x, (HEIGHT / 2) + LINESPACE);
             }
