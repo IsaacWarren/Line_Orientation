@@ -1,28 +1,17 @@
+import Letter from './letter.js';
+
 var canvas;
 var body;
 var ctx;
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 var LINESPACE = 50;
-var DOT_GAP = 10;
-var textWidth = 50;
+var SNAP_RANGE = 10;
 var NUM_LETTERS = 5;
 var letters = new Array(NUM_LETTERS);
-var alphabet = "abcdefghijklmnopqrstuvwxyz";
-
-class Letter {
-    constructor(x, y, char) {
-        this.x = x;
-        this.y = y;
-        this.char = char;
-        this.dragging = false;
-    }
-    setDim(width, height){
-        this.width = width;
-        this.height = height;
-    }
-}
-
+var lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
+var upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var alphabet =  lower_alphabet + upper_alphabet;
 
 
 function init() {
@@ -51,8 +40,8 @@ function init() {
 
 function genLetters() {
     for (let i = 0; i < NUM_LETTERS; ++i) {
-        letters[i] = new Letter(Math.random() * (WIDTH - 400) + 200, Math.random() * (HEIGHT - 400) + 200, char = alphabet[Math.floor(Math.random() * alphabet.length)]);
-        measurement = ctx.measureText(letters[i].char);
+        letters[i] = new Letter(Math.random() * (WIDTH - 400) + 200, Math.random() * (HEIGHT - 400) + 200, alphabet[Math.floor(Math.random() * alphabet.length)]);
+        let measurement = ctx.measureText(letters[i].char);
         letters[i].setDim(measurement.width, measurement.height);
     }
 }
@@ -114,6 +103,12 @@ function moveHandler(e) {
         if (letters[i].dragging){
             letters[i].x = e.pageX - canvas.offsetLeft;
             letters[i].y = e.pageY - canvas.offsetTop;
+            if (Math.abs(letters[i].y - ((HEIGHT / 2) + LINESPACE)) < SNAP_RANGE) {
+                letters[i].dragging = false;
+                letters[i].locked = true;
+                letters[i].y = (HEIGHT / 2) + LINESPACE;
+                party.position(letters[i].x, (HEIGHT / 2) + LINESPACE);
+            }
         }
     }
 }
@@ -129,7 +124,7 @@ function touchDown(touchE){
 
 function downHandler(e) {
     for (let i = 0; i < NUM_LETTERS; ++i) {
-        if (e.pageX < letters[i].x + 100 + canvas.offsetLeft && e.pageX > letters[i].x +
+        if (!letters[i].locked && e.pageX < letters[i].x + 100 + canvas.offsetLeft && e.pageX > letters[i].x +
             canvas.offsetLeft && e.pageY < letters[i].y + canvas.offsetTop &&
             e.pageY > letters[i].y - 100 + canvas.offsetTop){
         letters[i].x = e.pageX - canvas.offsetLeft;
