@@ -1,5 +1,3 @@
-import Letter from './letter.js';
-
 var canvas;
 var body;
 var ctx;

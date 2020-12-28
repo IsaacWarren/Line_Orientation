@@ -1,4 +1,4 @@
-export default class Letter {
+class Letter {
     constructor(x, y, char) {
         this.x = x;
         this.y = y;
