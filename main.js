@@ -27,33 +27,50 @@ class Letter {
 
 
 
-function clear() {
- ctx.clearRect(0, 0, WIDTH, HEIGHT);
+function init() {
+    x = 75;
+    y = 100;
+
+    canvas = document.getElementById("canvas");
+    body = document.getElementsByTagName("BODY")[0];
+    ctx = canvas.getContext("2d");
+
+    WIDTH = window.innerWidth;
+    HEIGHT = window.innerHeight;
+    ctx.canvas.width = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
+
+    canvas.addEventListener('touchstart', touchDown, false);
+    canvas.addEventListener('touchend', touchUp, false);
+    canvas.onmousedown = myDown;
+    canvas.onmouseup = myUp;
+    window.addEventListener('resize', resizeCanvas, false);
+
+    genLetters();
+
+    return setInterval(draw, 10);
 }
 
 function genLetters() {
     for (let i = 0; i < NUM_LETTERS; ++i) {
-        letters[i] = new Letter(Math.random() * WIDTH, y = Math.random() * HEIGHT, char = alphabet[Math.floor(Math.random() * alphabet.length)]);
+        letters[i] = new Letter(Math.random() * WIDTH, Math.random() * HEIGHT, char = alphabet[Math.floor(Math.random() * alphabet.length)]);
         measurement = ctx.measureText(letters[i].char);
         letters[i].setDim(measurement.width, measurement.height);
     }
 }
 
-function init() {
- canvas = document.getElementById("canvas");
- body = document.getElementsByTagName("BODY")[0];
- ctx = canvas.getContext("2d");
+function resizeCanvas() {
+    init();
+}
 
- ctx.canvas.width = window.innerWidth;
- ctx.canvas.height = window.innerHeight;
+function draw() {
+    clear();
+    drawTriline();
+    drawLetters();
+}
 
- canvas.addEventListener('touchstart', touchDown, false);
- canvas.addEventListener('touchend', touchUp, false);
- window.addEventListener('resize', resizeCanvas, false);
-
- genLetters();
-
- return setInterval(draw, 10);
+function clear() {
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
 function drawTriline() {
@@ -76,19 +93,12 @@ function drawTriline() {
     ctx.moveTo(0, (HEIGHT / 2));
     ctx.lineTo(WIDTH - 1, (HEIGHT / 2));
     ctx.stroke();
-    
-
 }
+
 function drawLetters() {
     ctx.font = "160px Primary Penmanship";
     ctx.fillText("B", x, y); 
     textWidth = ctx.measureText("A").width;
-}
-
-function draw() {
-    clear();
-    drawTriline();
-    drawLetters();
 }
 
 function myMove(e){
@@ -139,13 +149,4 @@ function touchUp(){
     canvas.removeEventListener('touchmove', touchMove, false);
    }
 
-function resizeCanvas() {
-    WIDTH = window.innerWidth;
-    HEIGHT = window.innerHeight;
-    ctx.canvas.width = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
-}
-
 init();
-canvas.onmousedown = myDown;
-canvas.onmouseup = myUp;
