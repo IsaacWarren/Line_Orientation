@@ -6,6 +6,7 @@ var HEIGHT = window.innerHeight;
 var LINESPACE = 50;
 var SNAP_RANGE = 10;
 var NUM_LETTERS = 5;
+var NUM_SOUNDS = 16;
 var letters = new Array(NUM_LETTERS);
 var lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
 var upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -38,7 +39,9 @@ function init() {
 
 function genLetters() {
     for (let i = 0; i < NUM_LETTERS; ++i) {
-        letters[i] = new Letter(Math.random() * (WIDTH - 400) + 200, Math.random() * (HEIGHT - 400) + 200, alphabet[Math.floor(Math.random() * alphabet.length)]);
+        letters[i] = new Letter(Math.random() * (WIDTH - 400) + 200, Math.random() * (HEIGHT - 400) + 200,
+                        alphabet[Math.floor(Math.random() * alphabet.length)],
+                        Math.floor(Math.random() * NUM_SOUNDS));
         let measurement = ctx.measureText(letters[i].char);
         letters[i].setDim(measurement.width, measurement.height);
     }
@@ -104,6 +107,7 @@ function moveHandler(e) {
             if (Math.abs(letters[i].y - ((HEIGHT / 2) + LINESPACE)) < SNAP_RANGE) {
                 letters[i].dragging = false;
                 //letters[i].locked = true;
+                letters[i].sound.play();
                 letters[i].y = (HEIGHT / 2) + LINESPACE;
                 party.position(letters[i].x, (HEIGHT / 2) + LINESPACE);
             }

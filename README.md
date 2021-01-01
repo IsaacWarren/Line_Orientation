@@ -1,5 +1,4 @@
 # TODO
-Add sound
 Make letters writeable
 Resize letters/spawn different sizes
 Configurability
