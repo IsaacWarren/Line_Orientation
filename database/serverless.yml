@@ -1,0 +1,15 @@
+component: aws-dynamodb
+name: lo-db
+
+inputs:
+  name: ${name}
+  deletionPolicy: delete # allows table to be removed. This property is a safe guard.
+  attributeDefinitions:
+    - AttributeName: activity
+      AttributeType: S
+    - AttributeName: user
+      AttributeType: S
+  keySchema:
+    - AttributeName: activity
+      KeyType: HASH
+  region: us-east-1
