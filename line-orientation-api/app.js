@@ -5,9 +5,10 @@ const express = require('express');
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 var multer  = require('multer');
+const fetch = require('node-fetch');
 var upload = multer();
 const { v4: uuidv4 } = require('uuid');
-var mustacheExpress = require('mustache-express');
+var mustache = require('mustache');
 
 const lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
 const upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -20,18 +21,16 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Headers', '*')
   next()
 })
-
-app.set('views', 'https://isaacwarren.github.io/Line_Orientation/');
-app.engine('html', mustache-express);
-app.set('view engine', 'html');
-
 // Routes
 app.get('/:id', async(req, res) => {
   const params = { TableName: process.env.tableName,
     Key: {activity: req.params.id}};
-    let db_res = await dynamodb.get(params).promise();
-    let alphabet = db_res.Item.alphabet;
-  res.render("activity_template", {"alphabet": alphabet});
+  let db_res = await dynamodb.get(params).promise();
+  let alphabet = db_res.Item.alphabet;
+  fetch("https://isaacwarren.github.io/Line_Orientation/activity_template.html")
+        .then(template_res => template_res.text())
+        .then(template => mustache.render(template, {"alphabet" : alphabet}))
+        .then(html => res.send(html));
 })
 
 app.post('/create_activity', upload.none(), async(req, res) => {
