@@ -1,36 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" name="viewport">
-        <title>Activity Creation</title>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, user-scalable=no">
+        <title>Line Orientation Test</title>
         <style>
+            @font-face {
+                font-family: Primary Penmanship;
+                src: url(KGPrimaryPenmanship2.ttf);
+            }
             html, body {
               width: 100%;
               height: 100%;
               margin: 0px;
               border: 0;
+              overflow: hidden; /*  Disable scrollbars */
+              display: block;  /* No floating content on sides */
             }
         </style>
     </head>
+
     <body>
-        <form id="create_form" method="POST" enctype="multipart/form-data">
-            <p>Alphabet</p>
-            <input type="radio" id="Upper" name="Alphabet" value="Upper">
-            <label for="Upper">Upper</label><br>
-            <input type="radio" id="Lower" name="Alphabet" value="Lower">
-            <label for="Lower">Lower</label><br>
-            <input type="radio" id="Mixed" name="Alphabet" value="Mixed">
-            <label for="Mixed">Mixed</label>
-
-            <p><input type="radio" id="Choose" name="Alphabet" value="Choose">
-            <label for="Choose">Choose</label><input type="text" id="Choose_t" name="Choose_t"><label for="Choose"></label>
-            </p>
-            <input type="submit" value="Submit" id="Submit Button">
-        </form>
-        
+        <section>
+            <div>
+                <canvas id="canvas" width="400" height="300">
+                This text is displayed if your browser does not support HTML5 Canvas.
+                </canvas>
+            </div>
+            <script src="party.js"></script>
+            <script src="letter.js"></script>
+            <script src='main.js'></script>
+        </section>
     </body>
-    <script src=env.js></script>
-    <script src=activity_create.js></script>
 
-    
 </html>
