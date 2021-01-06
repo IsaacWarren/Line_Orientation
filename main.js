@@ -9,6 +9,10 @@ var NUM_LETTERS = 5;
 var NUM_SOUNDS = 16;
 var letters = new Array(NUM_LETTERS);
 
+const lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
+const upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const full_alphabet =  lower_alphabet + upper_alphabet;
+
 function init() {
 
     canvas = document.getElementById("canvas");
