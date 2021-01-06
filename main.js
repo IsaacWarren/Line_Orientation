@@ -11,7 +11,7 @@ var letters = new Array(NUM_LETTERS);
 
 const lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
 const upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const full_alphabet =  lower_alphabet + upper_alphabet;
+const alphabet =  lower_alphabet + upper_alphabet;
 
 function init() {
 
