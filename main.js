@@ -8,10 +8,6 @@ var SNAP_RANGE = 10;
 var NUM_LETTERS = 5;
 var NUM_SOUNDS = 16;
 var letters = new Array(NUM_LETTERS);
-var lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
-var upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-var alphabet =  lower_alphabet + upper_alphabet;
-
 
 function init() {
 

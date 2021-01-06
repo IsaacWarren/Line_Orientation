@@ -1,3 +1,8 @@
+function setActivityDiv(act_id) {
+  url_div = document.getElementById("activity_url");
+  url_div.innerHTML = "Activity URL: " + API_URL + "/" + act_id;
+}
+
 window.addEventListener( "load", function () {
     function sendData() {
     
@@ -7,6 +12,7 @@ window.addEventListener( "load", function () {
             body: new FormData(form)
         })
         .then(res => res.text())
+        .then(res => setActivityDiv(res))
         .catch(err => console.error(err));;
     }
   
