@@ -1,6 +1,6 @@
 function setActivityDiv(act_id) {
   url_div = document.getElementById("activity_url");
-  url_div.innerHTML = "Activity URL: " + API_URL + "/" + act_id;
+  url_div.innerHTML = "Activity Code:" + act_id;
 }
 
 window.addEventListener( "load", function () {

@@ -1,23 +1,47 @@
 var canvas;
 var body;
 var ctx;
+var config;
+var err_text = document.getElementById("Err_Text");
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 var LINESPACE = 50;
 var SNAP_RANGE = 10;
-var NUM_LETTERS = 5;
 var NUM_SOUNDS = 16;
-var letters = new Array(NUM_LETTERS);
+var letters;
 
-const lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
-const upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const alphabet =  lower_alphabet + upper_alphabet;
+async function get_config() {
+    code_textbox = document.getElementById("code_textbox");
+    try {
+        var response = await fetch(API_URL + "/" + code_textbox.value);
+    } catch(error) {
+        err_text.innerHTML = error;
+    }
+    config = await response.json();
+}
+
+async function handle_start() {
+    await get_config();
+    if (!config) {
+        err_text.innerHTML = "Invalid Code";
+    } else {
+        activity_init();
+    }
+}
 
 function init() {
+    let code_btn = document.getElementById('code-button');
+    code_btn.addEventListener('click', handle_start, false);
+}
 
+function activity_init() {
     canvas = document.getElementById("canvas");
     body = document.getElementsByTagName("BODY")[0];
     ctx = canvas.getContext("2d");
+    code_box = document.getElementsByClassName("center")[0];
+
+    code_box.style = "visibility: hidden;"
+    canvas.style = "";
 
     WIDTH = window.innerWidth;
     HEIGHT = window.innerHeight;
@@ -32,15 +56,17 @@ function init() {
     canvas.onmousemove = myMove;
     window.addEventListener('resize', resizeCanvas, false);
 
+    letters = new Array(config.alphabet.length);
+
     genLetters();
 
     return setInterval(draw, 10);
 }
 
 function genLetters() {
-    for (let i = 0; i < NUM_LETTERS; ++i) {
+    for (let i = 0; i < config.alphabet.length; ++i) {
         letters[i] = new Letter(Math.random() * (WIDTH - 400) + 200, Math.random() * (HEIGHT - 400) + 200,
-                        alphabet[Math.floor(Math.random() * alphabet.length)],
+                        config.alphabet[i],
                         Math.floor(Math.random() * NUM_SOUNDS));
         let measurement = ctx.measureText(letters[i].char);
         letters[i].setDim(measurement.width, measurement.height);
@@ -85,7 +111,7 @@ function drawTriline() {
 
 function drawLetters() {
     ctx.font = "165px Primary Penmanship";
-    for (let i = 0; i < NUM_LETTERS; ++i) {
+    for (let i = 0; i < config.alphabet.length; ++i) {
         ctx.fillText(letters[i].char, letters[i].x, letters[i].y);
     }
 }
@@ -100,7 +126,7 @@ function touchMove(e){
 }
 
 function moveHandler(e) {
-    for (let i = 0; i < NUM_LETTERS; ++i) {
+    for (let i = 0; i < config.alphabet.length; ++i) {
         if (letters[i].dragging){
             letters[i].x = e.pageX - canvas.offsetLeft;
             letters[i].y = e.pageY - canvas.offsetTop;
@@ -125,7 +151,7 @@ function touchDown(touchE){
 }
 
 function downHandler(e) {
-    for (let i = 0; i < NUM_LETTERS; ++i) {
+    for (let i = 0; i < config.alphabet.length; ++i) {
         if (!letters[i].locked && e.pageX < letters[i].x + 100 + canvas.offsetLeft && e.pageX > letters[i].x +
             canvas.offsetLeft && e.pageY < letters[i].y + canvas.offsetTop &&
             e.pageY > letters[i].y - 100 + canvas.offsetTop){
@@ -138,7 +164,7 @@ function downHandler(e) {
 }
 
 function upHandler(e) {
-    for (let i = 0; i < NUM_LETTERS; ++i) {
+    for (let i = 0; i < config.alphabet.length; ++i) {
         if (letters[i].dragging) {
             letters[i].dragging = false;
         }

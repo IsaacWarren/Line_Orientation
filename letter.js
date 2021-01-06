@@ -5,7 +5,7 @@ class Letter {
         this.char = char;
         this.dragging = false;
         this.locked = false;
-        this.sound = new Audio("https://isaacwarren.github.io/Line_Orientation/sounds/" + String(sound_name) + ".ogg");
+        this.sound = new Audio("sounds/" + String(sound_name) + ".ogg");
     }
     setDim(width, height){
         this.width = width;

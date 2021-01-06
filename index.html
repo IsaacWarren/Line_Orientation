@@ -16,17 +16,40 @@
               overflow: hidden; /*  Disable scrollbars */
               display: block;  /* No floating content on sides */
             }
+
+           .center {
+
+                position: absolute;
+
+                left: 50%;
+
+                top: 50%;
+
+                transform: translate(-50%, -50%);
+
+                border: 5px solid #000000;
+
+                padding: 10px;
+
+                }
         </style>
     </head>
 
     <body>
+        <div class="center">
+            <p>Enter Your Code:</p>
+            <input type="text", id="code_textbox">
+            <input type="button" id="code-button" value="Submit">
+            <p id="Err_Text", style="color: red;"></p>
+        </div>
         <section>
             <div>
-                <canvas id="canvas" width="400" height="300">
+                <canvas id="canvas" width="400" height="300" style="visibility: hidden;">
                 This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
             </div>
             <script src="party.js"></script>
+            <script src="env.js"></script>
             <script src="letter.js"></script>
             <script src='main.js'></script>
         </section>

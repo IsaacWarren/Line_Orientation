@@ -5,10 +5,8 @@ const express = require('express');
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 var multer  = require('multer');
-const fetch = require('node-fetch');
 var upload = multer();
 const { v4: uuidv4 } = require('uuid');
-var mustache = require('mustache');
 
 const lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
 const upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -26,11 +24,7 @@ app.get('/:id', async(req, res) => {
   const params = { TableName: process.env.tableName,
     Key: {activity: req.params.id}};
   let db_res = await dynamodb.get(params).promise();
-  let alphabet = db_res.Item.alphabet;
-  fetch("https://isaacwarren.github.io/Line_Orientation/activity_template.html")
-        .then(template_res => template_res.text())
-        .then(template => mustache.render(template, {"alphabet" : alphabet}))
-        .then(html => res.send(html));
+  res.send(db_res.Item);
 })
 
 app.post('/create_activity', upload.none(), async(req, res) => {
@@ -38,7 +32,7 @@ app.post('/create_activity', upload.none(), async(req, res) => {
 
   let alphabet = "";
   if (req.body.Alphabet == 'Choose') {
-    alphabet = req.body.Choose_t;
+    alphabet = req.body.Choose_t.replace(/ /g,'');
   } else if (req.body.Alphabet == 'Lower') {
     alphabet = lower_alphabet;
   } else if (req.body.Alphabet == 'Upper') {
