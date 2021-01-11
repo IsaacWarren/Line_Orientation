@@ -31,6 +31,9 @@
 
                 padding: 10px;
                 }
+            canvas { position: absolute; }
+            #canvas_line { z-index: 1; }
+            #canvas_letters { z-index: 2; }
         </style>
     </head>
 
@@ -44,8 +47,11 @@
         </div>
         <section>
             <div>
-                <canvas id="canvas" width="400" height="300" style="visibility: hidden;">
+                <canvas id="canvas_line" width="400" height="300" style="visibility: hidden;">
                 This text is displayed if your browser does not support HTML5 Canvas.
+                </canvas>
+                <canvas id="canvas_letters" width="400" height="300" style="visibility: hidden;">
+                    This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
             </div>
             <script src="party.js"></script>

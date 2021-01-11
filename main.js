@@ -1,6 +1,8 @@
-var canvas;
+var canvas_letters;
+var canvas_line;
 var body;
-var ctx;
+var ctx_letter;
+var ctx_line
 var config;
 var err_text = document.getElementById("Err_Text");
 var WIDTH = window.innerWidth;
@@ -35,30 +37,38 @@ function init() {
 }
 
 function activity_init() {
-    canvas = document.getElementById("canvas");
+    canvas_letters = document.getElementById("canvas_letters");
+    canvas_line = document.getElementById("canvas_line");
     body = document.getElementsByTagName("BODY")[0];
-    ctx = canvas.getContext("2d");
+    ctx_letter = canvas_letters.getContext("2d");
+    ctx_line = canvas_line.getContext("2d");
     code_box = document.getElementsByClassName("center")[0];
 
     code_box.style = "visibility: hidden;"
-    canvas.style = "";
+    canvas_letters.style = "";
+    canvas_line.style = "";
 
     WIDTH = window.innerWidth;
     HEIGHT = window.innerHeight;
-    ctx.canvas.width = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
+    ctx_letter.canvas.width = window.innerWidth;
+    ctx_letter.canvas.height = window.innerHeight;
+    ctx_letter.font = "165px Primary Penmanship";
+    ctx_line.canvas.width = window.innerWidth;
+    ctx_line.canvas.height = window.innerHeight;
 
-    canvas.addEventListener('touchstart', touchDown, false);
-    canvas.addEventListener('touchend', upHandler, false);
-    canvas.addEventListener('touchmove', touchMove, false);
-    canvas.onmousedown = mouseDown;
-    canvas.onmouseup = upHandler;
-    canvas.onmousemove = myMove;
+    canvas_letters.addEventListener('touchstart', touchDown, false);
+    canvas_letters.addEventListener('touchend', upHandler, false);
+    canvas_letters.addEventListener('touchmove', touchMove, false);
+    canvas_letters.onmousedown = mouseDown;
+    canvas_letters.onmouseup = upHandler;
+    canvas_letters.onmousemove = myMove;
     window.addEventListener('resize', resizeCanvas, false);
 
     letters = new Array(config.alphabet.length);
 
     genLetters();
+
+    drawTriline();
 
     return setInterval(draw, 10);
 }
@@ -68,51 +78,49 @@ function genLetters() {
         letters[i] = new Letter(Math.random() * (WIDTH - 400) + 200, Math.random() * (HEIGHT - 400) + 200,
                         config.alphabet[i],
                         Math.floor(Math.random() * NUM_SOUNDS));
-        let measurement = ctx.measureText(letters[i].char);
+        let measurement = ctx_letter.measureText(letters[i].char);
         letters[i].setDim(measurement.width, measurement.height);
     }
 }
 
 function resizeCanvas() {
-    init();
+    activity_init();
 }
 
 function draw() {
     clear();
-    drawTriline();
     drawLetters();
 }
 
 function clear() {
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx_letter.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
 function drawTriline() {
-    ctx.setLineDash([]);
-    ctx.strokeStyle = '#fc0515';
-    ctx.beginPath();
-    ctx.moveTo(0, (HEIGHT / 2) + LINESPACE);
-    ctx.lineTo(WIDTH - 1, (HEIGHT / 2) + LINESPACE);
-    ctx.stroke();
+    ctx_line.setLineDash([]);
+    ctx_line.strokeStyle = '#fc0515';
+    ctx_line.beginPath();
+    ctx_line.moveTo(0, (HEIGHT / 2) + LINESPACE);
+    ctx_line.lineTo(WIDTH - 1, (HEIGHT / 2) + LINESPACE);
+    ctx_line.stroke();
 
-    ctx.strokeStyle = '#0da4e5';
-    ctx.beginPath()
-    ctx.moveTo(0, (HEIGHT / 2) - LINESPACE);
-    ctx.lineTo(WIDTH - 1, (HEIGHT / 2) - LINESPACE);
-    ctx.stroke();
+    ctx_line.strokeStyle = '#0da4e5';
+    ctx_line.beginPath()
+    ctx_line.moveTo(0, (HEIGHT / 2) - LINESPACE);
+    ctx_line.lineTo(WIDTH - 1, (HEIGHT / 2) - LINESPACE);
+    ctx_line.stroke();
 
-    ctx.strokeStyle = '#0da4e5';
-    ctx.setLineDash([15, 5]);
-    ctx.beginPath();
-    ctx.moveTo(0, (HEIGHT / 2));
-    ctx.lineTo(WIDTH - 1, (HEIGHT / 2));
-    ctx.stroke();
+    ctx_line.strokeStyle = '#0da4e5';
+    ctx_line.setLineDash([15, 5]);
+    ctx_line.beginPath();
+    ctx_line.moveTo(0, (HEIGHT / 2));
+    ctx_line.lineTo(WIDTH - 1, (HEIGHT / 2));
+    ctx_line.stroke();
 }
 
 function drawLetters() {
-    ctx.font = "165px Primary Penmanship";
     for (let i = 0; i < config.alphabet.length; ++i) {
-        ctx.fillText(letters[i].char, letters[i].x, letters[i].y);
+        ctx_letter.fillText(letters[i].char, letters[i].x, letters[i].y);
     }
 }
 
@@ -128,8 +136,8 @@ function touchMove(e){
 function moveHandler(e) {
     for (let i = 0; i < config.alphabet.length; ++i) {
         if (letters[i].dragging){
-            letters[i].x = e.pageX - canvas.offsetLeft;
-            letters[i].y = e.pageY - canvas.offsetTop;
+            letters[i].x = e.pageX - canvas_letters.offsetLeft;
+            letters[i].y = e.pageY - canvas_letters.offsetTop;
             if (Math.abs(letters[i].y - ((HEIGHT / 2) + LINESPACE)) < SNAP_RANGE) {
                 letters[i].dragging = false;
                 //letters[i].locked = true;
@@ -152,11 +160,11 @@ function touchDown(touchE){
 
 function downHandler(e) {
     for (let i = 0; i < config.alphabet.length; ++i) {
-        if (!letters[i].locked && e.pageX < letters[i].x + 100 + canvas.offsetLeft && e.pageX > letters[i].x +
-            canvas.offsetLeft && e.pageY < letters[i].y + canvas.offsetTop &&
-            e.pageY > letters[i].y - 100 + canvas.offsetTop){
-        letters[i].x = e.pageX - canvas.offsetLeft;
-        letters[i].y = e.pageY - canvas.offsetTop;
+        if (!letters[i].locked && e.pageX < letters[i].x + 100 + canvas_letters.offsetLeft && e.pageX > letters[i].x +
+            canvas_letters.offsetLeft && e.pageY < letters[i].y + canvas_letters.offsetTop &&
+            e.pageY > letters[i].y - 100 + canvas_letters.offsetTop){
+        letters[i].x = e.pageX - canvas_letters.offsetLeft;
+        letters[i].y = e.pageY - canvas_letters.offsetTop;
         letters[i].dragging = true;
         break;
         }
