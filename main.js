@@ -138,7 +138,7 @@ function moveHandler(e) {
         if (letters[i].dragging){
             letters[i].x = e.pageX - canvas_letters.offsetLeft;
             letters[i].y = e.pageY - canvas_letters.offsetTop;
-            if (Math.abs(letters[i].y - ((HEIGHT / 2) + LINESPACE)) < SNAP_RANGE) {
+            if (Math.abs(letters[i].y - ((HEIGHT / 2) + LINESPACE)) < SNAP_RANGE && config.line_snap == "mouse_move") {
                 letters[i].dragging = false;
                 //letters[i].locked = true;
                 letters[i].sound.play();
@@ -174,6 +174,13 @@ function downHandler(e) {
 function upHandler(e) {
     for (let i = 0; i < config.alphabet.length; ++i) {
         if (letters[i].dragging) {
+            if (Math.abs(letters[i].y - ((HEIGHT / 2) + LINESPACE)) < SNAP_RANGE && config.line_snap == "mouse_up") {
+                letters[i].dragging = false;
+                //letters[i].locked = true;
+                letters[i].sound.play();
+                letters[i].y = (HEIGHT / 2) + LINESPACE;
+                party.position(letters[i].x, (HEIGHT / 2) + LINESPACE);
+            }
             letters[i].dragging = false;
         }
     }

@@ -14,8 +14,8 @@
     </head>
     <body>
         <form id="create_form" method="POST" enctype="multipart/form-data">
-            <p>Alphabet</p>
-            <input type="radio" id="Upper" name="Alphabet" value="Upper">
+            <h4>Alphabet</h4>
+            <input type="radio" id="Upper" name="Alphabet" value="Upper" checked="checked">
             <label for="Upper">Upper</label><br>
             <input type="radio" id="Lower" name="Alphabet" value="Lower">
             <label for="Lower">Lower</label><br>
@@ -25,7 +25,15 @@
             <p><input type="radio" id="Choose" name="Alphabet" value="Choose">
             <label for="Choose">Choose</label><input type="text" id="Choose_t" name="Choose_t"><label for="Choose"></label>
             </p>
+            <p></p>
+            <h4>Line Snapping</h4>
+            <input type="radio" id="mouse_up" name="Line_Snapping" value="mouse_up">
+            <label for="mouse_up">Snap to line on release of mouse</label><br>
+            <input type="radio" id="mouse_move" name="Line_Snapping" value="mouse_move" checked="checked">
+            <label for="nouse_move">Always snap to line</label>
+            <p>
             <input type="submit" value="Submit" id="Submit Button">
+            </p>
         </form>
         <div id="activity_url"></div>
         

@@ -56,7 +56,7 @@ app.post('/create_activity', upload.none(), async(req, res) => {
   }
 
   const params = { TableName: process.env.tableName,
-    Item: {activity:act_id, alphabet: alphabet}};
+    Item: {activity:act_id, alphabet: alphabet, line_snap: req.body.Line_Snapping}};
   await dynamodb.put(params).promise();
   
   res.send(act_id);
