@@ -20,6 +20,9 @@ async function get_config() {
         err_text.innerHTML = error;
     }
     config = await response.json();
+    if (config.line_snap == undefined) {
+        config.line_snap = "mouse_move";
+    }
 }
 
 async function handle_start() {
