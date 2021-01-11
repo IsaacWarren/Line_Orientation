@@ -7,8 +7,6 @@ inputs:
   attributeDefinitions:
     - AttributeName: activity
       AttributeType: S
-    - AttributeName: user
-      AttributeType: S
   keySchema:
     - AttributeName: activity
       KeyType: HASH

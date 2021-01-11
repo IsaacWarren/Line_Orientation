@@ -6,11 +6,25 @@ const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 var multer  = require('multer');
 var upload = multer();
-const { v4: uuidv4 } = require('uuid');
 
 const lower_alphabet = "abcdefghijklmnopqrstuvwxyz";
 const upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const full_alphabet =  lower_alphabet + upper_alphabet;
+
+
+const random_string = (length = 5) => {
+  // Declare all characters
+  let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+  // Pick characers randomly
+  let str = '';
+  for (let i = 0; i < length; i++) {
+      str += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return str;
+
+};
 
 const app = express();
 app.use(function (req, res, next) {
@@ -28,7 +42,7 @@ app.get('/:id', async(req, res) => {
 })
 
 app.post('/create_activity', upload.none(), async(req, res) => {
-  let act_id = uuidv4();
+  let act_id = random_string();
 
   let alphabet = "";
   if (req.body.Alphabet == 'Choose') {
