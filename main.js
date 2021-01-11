@@ -13,7 +13,7 @@ var letters;
 async function get_config() {
     code_textbox = document.getElementById("code_textbox");
     try {
-        var response = await fetch(API_URL + "/" + code_textbox.value);
+        var response = await fetch(API_URL + "/" + code_textbox.value.toUpperCase());
     } catch(error) {
         err_text.innerHTML = error;
     }
