@@ -120,7 +120,7 @@ function drawTriline() {
 
 function drawLetters() {
     for (let i = 0; i < config.alphabet.length; ++i) {
-        ctx_letter.fillText(letters[i].char, letters[i].x, letters[i].y);
+        ctx_letter.fillText(letters[i].char, Math.floor(letters[i].x), Math.floor(letters[i].y));
     }
 }
 
